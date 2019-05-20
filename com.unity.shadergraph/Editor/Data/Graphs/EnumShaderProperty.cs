@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace UnityEditor.ShaderGraph
 {
-    public enum EnumType
+    enum EnumType
     {
         Enum,
-        KeywordEnum,
+        KeywordEnum
     }
 
     [Serializable]
@@ -21,49 +21,30 @@ namespace UnityEditor.ShaderGraph
             displayName = "Enum";
         }
 
-        public override PropertyType propertyType
-        {
-            get { return PropertyType.Vector1; }
-        }
+        public override PropertyType propertyType => PropertyType.Vector1;
 
-        public override Vector4 defaultValue
-        {
-            get { return new Vector4(value, value, value, value); }
-        }
+        public override Vector4 defaultValue => new Vector4(value, value, value, value);
 
-        public override bool isBatchable
-        {
-            get { return true; }
-        }
+        public override bool isBatchable => true;
 
-        public override bool isExposable
-        {
-            get { return true; }
-        }
+        public override bool isExposable => true;
 
-        public override bool isRenamable
-        {
-            get { return true; }
-        }
+        public override bool isRenamable => true;
 
         [SerializeField]
-        private EnumType m_EnumType = EnumType.Enum;
+        EnumType m_EnumType = EnumType.Enum;
 
         public EnumType enumType
         {
-            get { return m_EnumType; }
-            set
-            {
-                if (m_EnumType == value)
-                    return;
-                m_EnumType = value;
-            }
+            get => m_EnumType;
+            set => m_EnumType = value;
         }
 
         [SerializeField]
-        private List<string> m_EnumNames = new List<string>();
+        List<string> m_EnumNames = new List<string>();
+        
         [SerializeField]
-        private List<int> m_EnumValues = new List<int>();
+        List<int> m_EnumValues = new List<int>();
 
         public List<string> enumNames
         {
@@ -78,23 +59,27 @@ namespace UnityEditor.ShaderGraph
         }
         
         [SerializeField]
-        bool    m_Hidden = false;
+        bool m_Hidden = false;
 
         public bool hidden
         {
-            get { return m_Hidden; }
-            set { m_Hidden = value; }
+            get => m_Hidden;
+            set => m_Hidden = value;
         }
 
         public override string GetPropertyBlockString()
         {
             var result = new StringBuilder();
             if (hidden)
+            {
                 result.Append("[HideInInspector] ");
+            }
 
             string enumValuesString = ""; // TODO
             if (enumType == EnumType.KeywordEnum)
+            {
                 enumValuesString = enumNames.Aggregate((s, e) => s + ", " + e);
+            }
             else
             {
                 for (int i = 0; i < enumNames.Count; i++)
@@ -111,7 +96,7 @@ namespace UnityEditor.ShaderGraph
 
         public override string GetPropertyDeclarationString(string delimiter = ";")
         {
-            return string.Format("float {0}{1}", referenceName, delimiter);
+            return $"float {referenceName}{delimiter}";
         }
 
         public override PreviewProperty GetPreviewMaterialProperty()
