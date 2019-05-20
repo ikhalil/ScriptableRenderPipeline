@@ -2772,11 +2772,16 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         void RenderSky(HDCamera hdCamera, CommandBuffer cmd)
         {
+            if(m_DebugDisplaySettings.GetDebugLightingMode() == DebugLightingMode.MatcapView)
+            {
+                return;
+            }
+
             var colorBuffer = hdCamera.frameSettings.IsEnabled(FrameSettingsField.MSAA) ? m_CameraColorMSAABuffer : m_CameraColorBuffer;
             var depthBuffer = m_SharedRTManager.GetDepthStencilBuffer(hdCamera.frameSettings.IsEnabled(FrameSettingsField.MSAA));
 
             var visualEnv = VolumeManager.instance.stack.GetComponent<VisualEnvironment>();
-            m_SkyManager.RenderSky(hdCamera, CoreUtils.IsSceneLightingDisabled(hdCamera.camera) ? null : GetCurrentSunLight(), colorBuffer, depthBuffer, m_CurrentDebugDisplaySettings, cmd);
+            m_SkyManager.RenderSky(hdCamera, GetCurrentSunLight(), colorBuffer, depthBuffer, m_CurrentDebugDisplaySettings, cmd);
 
             if (visualEnv.fogType.value != FogType.None)
             {
