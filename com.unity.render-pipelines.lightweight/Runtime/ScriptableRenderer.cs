@@ -298,6 +298,10 @@ namespace UnityEngine.Rendering.LWRP
         void ExecuteBlock(RenderPassEvent startEvent, RenderPassEvent endEvent,
             ScriptableRenderContext context, ref RenderingData renderingData, bool submit = false)
         {
+            // TODO: Ideally we want to compute the block indices once. This requires a little bit of
+            // reworking and testing. Meanwhile, to fix the allocation issues, we loop until the first
+            // render pass index of the block. Since there render pass count should be kept to sane levels
+            // the cost of looping here should be neglicible. Will do the pre-computed block indices in a next PR. 
             int currIndex = 0;
             while (m_ActiveRenderPassQueue[currIndex].renderPassEvent < startEvent)
                 currIndex++;
