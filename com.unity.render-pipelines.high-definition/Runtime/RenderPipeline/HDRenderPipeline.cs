@@ -2762,7 +2762,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         void UpdateSkyEnvironment(HDCamera hdCamera, CommandBuffer cmd)
         {
-            m_SkyManager.UpdateEnvironment(hdCamera, CoreUtils.IsSceneLightingDisabled(hdCamera.camera) ? null : GetCurrentSunLight(), cmd);
+            m_SkyManager.UpdateEnvironment(hdCamera, GetCurrentSunLight(), cmd);
         }
 
         public void RequestSkyEnvironmentUpdate()
