@@ -919,6 +919,13 @@ namespace UnityEditor.ShaderGraph
             return graph.outputNode.GetType();
         }
 
+        public static bool IsShaderGraph(this Shader shader)
+        {
+            var path = AssetDatabase.GetAssetPath(shader);
+            var importer = AssetImporter.GetAtPath(path);
+            return importer is ShaderGraphImporter;
+        }
+
         public static void GenerateApplicationVertexInputs(ShaderGraphRequirements graphRequiements, ShaderStringBuilder vertexInputs)
         {
             vertexInputs.AppendLine("struct GraphVertexInput");
