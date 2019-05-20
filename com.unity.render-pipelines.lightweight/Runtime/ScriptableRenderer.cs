@@ -380,7 +380,7 @@ namespace UnityEngine.Rendering.LWRP
             RenderBufferLoadAction colorLoadAction = clearFlag != ClearFlag.None ?
                 RenderBufferLoadAction.DontCare : RenderBufferLoadAction.Load;
 
-            RenderBufferLoadAction depthLoadAction = CoreUtils.HasFlag((uint)clearFlag, (uint)ClearFlag.Depth) ?
+            RenderBufferLoadAction depthLoadAction = ((uint)clearFlag & (uint)ClearFlag.Depth) != 0 ?
                 RenderBufferLoadAction.DontCare : RenderBufferLoadAction.Load;
 
             TextureDimension dimension = (m_InsideStereoRenderBlock) ? XRGraphics.eyeTextureDesc.dimension : TextureDimension.Tex2D;
