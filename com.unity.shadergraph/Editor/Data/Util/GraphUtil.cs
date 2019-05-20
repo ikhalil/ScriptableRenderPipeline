@@ -912,6 +912,13 @@ namespace UnityEditor.ShaderGraph
                 string.Format("New Shader Graph.{0}", ShaderGraphImporter.Extension), null, null);
         }
 
+        public static Type GetOutputNodeType(string path)
+        {
+            var textGraph = File.ReadAllText(path, Encoding.UTF8);
+            var graph = JsonUtility.FromJson<GraphData>(textGraph);
+            return graph.outputNode.GetType();
+        }
+
         public static void GenerateApplicationVertexInputs(ShaderGraphRequirements graphRequiements, ShaderStringBuilder vertexInputs)
         {
             vertexInputs.AppendLine("struct GraphVertexInput");
