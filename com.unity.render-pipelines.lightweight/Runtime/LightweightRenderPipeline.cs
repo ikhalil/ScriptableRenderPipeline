@@ -145,7 +145,11 @@ namespace UnityEngine.Rendering.LWRP
             var settings = asset;
             LWRPAdditionalCameraData additionalCameraData = null;
             if (camera.cameraType == CameraType.Game || camera.cameraType == CameraType.VR)
+#if UNITY_2019_3_OR_NEWER
+                camera.gameObject.TryGetComponent(out additionalCameraData);
+#else
                 additionalCameraData = camera.gameObject.GetComponent<LWRPAdditionalCameraData>();
+#endif
 
             InitializeCameraData(settings, camera, additionalCameraData, out var cameraData);
             SetupPerCameraShaderConstants(cameraData);
@@ -236,7 +240,11 @@ namespace UnityEngine.Rendering.LWRP
             
             cameraData.isSceneViewCamera = camera.cameraType == CameraType.SceneView;
             cameraData.isHdrEnabled = camera.allowHDR && settings.supportsHDR;
+#if UNITY_2019_3_OR_NEWER
+            camera.TryGetComponent(out cameraData.postProcessLayer);
+#else
             cameraData.postProcessLayer = camera.GetComponent<PostProcessLayer>();
+#endif
             cameraData.postProcessEnabled = cameraData.postProcessLayer != null && cameraData.postProcessLayer.isActiveAndEnabled;
 
             // Disables postprocessing in mobile VR. It's stable on mobile yet.
@@ -337,8 +345,15 @@ namespace UnityEngine.Rendering.LWRP
             for (int i = 0; i < visibleLights.Length; ++i)
             {
                 Light light = visibleLights[i].light;
-                LWRPAdditionalLightData data =
-                    (light != null) ? light.gameObject.GetComponent<LWRPAdditionalLightData>() : null;
+                LWRPAdditionalLightData data = null;
+                if (light != null)
+                {
+#if UNITY_2019_3_OR_NEWER
+                    light.gameObject.TryGetComponent(out data);
+#else
+                    data = light.gameObject.GetComponent<LWRPAdditionalLightData>();
+#endif
+                }
 
                 if (data && !data.usePipelineSettings)
                     m_ShadowBiasData.Add(new Vector4(light.shadowBias, light.shadowNormalBias, 0.0f, 0.0f));
